@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "codeforge-frontend.fullname" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "codeforge-frontend.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "codeforge-frontend.name" . }}
+    spec:
+      containers:
+        - name: frontend
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: 80
+          env:
+            # nếu cần config kết nối tới BE
+            - name: REACT_APP_API_URL
+              value: "http://backend-service-url"
+
